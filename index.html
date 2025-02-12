@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- css from https://github.com/ai-workshops/ai-workshops.github.io/blob/master/generalizable-policy-learning-in-the-physical-world/style.css -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+  integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+
+<link rel="icon"
+  href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text x=%22-.1em%22 y=%22.9em%22 font-size=%2280%22>🤖</text></svg>">
+
+<!-- jQuery library -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"
+  integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"
+  integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
+
+
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <title>Workshop on Learned Robot Representations | RSS 2025</title>
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    .collapsible {
+      background-color: #fff;
+      color: #000;
+      cursor: pointer;
+      padding: 18px;
+      width: 100%;
+      border: 0px solid white;
+      text-align: center;
+      outline: none;
+      font-size: 15px;
+    }
+
+    .title-container {
+      width: 100%;
+      margin: auto;
+      padding: 40px 20px;
+      color: black;
+      background-image: linear-gradient(135deg, #333, black, #333);
+      background: white;
+      /* background-image: url("imgs/corl2024_background.png"); */
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat, repeat;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      margin-top: 55px;
+    }
+
+    .active,
+    .collapsible:hover {
+      background-color: #bbb;
+    }
+
+    .content {
+      padding: 5px 18px;
+      display: none;
+      overflow: hidden;
+      background-color: #f1f1f1;
+    }
+
+    .triangle-up {
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-bottom: 20px solid rgb(255, 255, 255);
+      float: right;
+    }
+
+    .triangle-down {
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-top: 20px solid rgb(255, 255, 255);
+      float: right;
+    }
+  </style>
+
+
+
+
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-xl navbar-expand-lg navbar-expand-custom navbar-fixed-top sticky-nav">
+    <button class="navbar-toggler navbar-light" type="button" data-toggle="collapse" data-target="#main-navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="main-navigation">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="index.html#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="index.html#call">Call for Papers</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="index.html#dates">Dates</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="index.html#schedule">Schedule</a>
+        </li>
+        <!-- <li class="nav-item">
+            <a class="nav-link" href="index.html#program">Program</a>
+          </li> -->
+        <!-- <li class="nav-item">
+          <a class="nav-link" href="index.html#related">Related Workshops</a>
+        </li> -->
+        <li class="nav-item">
+          <a class="nav-link" href="index.html#committee">Committees</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="title-container">
+    <div style="text-align: center;">
+      <!-- <a href="https://www.corl.org/" target="_blank"><img src="imgs/corl2024.png" style="width:250px;"></a> -->
+      <br>
+      <div class="subtitle">Workshop on </div>
+      <h1 style="width:80%;margin:auto;">Learned Robot Representations (RoboReps)</h1>
+      <div class="subtitle" style="color: #130b69; margin: 20px; margin-bottom: -10px;">
+        RSS 2025 | Los Angeles, CA | Wednesday, June 25th, 2025
+      </div>
+      <br>
+      <h3>Email: <a href="mailto:rss25.roboreps@gmail.com">rss25.roboreps@gmail.com</a></h3>
+    </div>
+  </div>
+
+  <div class="container" style="padding-bottom: 0px;">
+    <div class="section" id="overview">
+      <h2>Overview</h2>
+      <p>General-purpose robotic systems require powerful representations and abstractions. In deployment, such robots
+        are expected to encounter diverse and complex scenarios. While recent large-scale learned models exhibit
+        remarkable generalization, similarly getting representations that can flexibly generalize to all the
+        unanticipated situations a robot might face remains challenging, especially given the cost of robot data. Thus,
+        it is important to investigate how to best learn generalizable representations, evaluate their effectiveness,
+        and leverage them for downstream robotics tasks.</p>
+      <p>Ideally, these representations should capture: (1) spatial-dynamic information needed for fine-grained control,
+        (2) semantic information required for common-sense reasoning and scene understanding, and (3) knowledge of
+        conventions needed for smooth human-robot interactions. Additionally, these representations must be robust to
+        the diversity of tasks, scenes, and operators the robot will encounter. In this workshop, we aim to explore the
+        following: What makes a good robot representation, how can we learn them, and how can we most effectively make
+        use of them?</p>
+      <p>Our speakers and panelists are pioneering robotics and machine learning researchers defining the state of the
+        art on a range of topics, including: end-to-end control, task and motion planning (TAMP), human-robot
+        interaction (HRI), scene understanding / SLAM, and more. We invite the community for submissions in these areas
+        as well as from a wider set of perspectives – for example, submissions addressing how the following fields might
+        guide robotics research: (1) deep representation learning in vision and language; (2) learning representations
+        for field robotics and AI, where data is extremely scarce or noisy; or (3) bias and robustness in neural
+        representations.</p>
+
+
+    </div>
+
+    <div class="section" id="objectives">
+      <!-- What sorts of pre-training tasks, objectives, data, or models yield good representations for robotics?
+      How do we evaluate or choose good pre-trained models to fine-tune into robot policies or leverage in a perception or control stack?
+      Is “embodied” or “grounded” data necessary for good robot representations, or is general pre-training data sufficient?
+      When is fine-tuning large models from other domains enough for robotic foundation models and when do we need robot-specific large-scale training?
+      How do we elicit representations at a level of granularity and semantic abstraction that is appropriate for robot tasks?
+      What functionalities do pre-trained representations grant robots? E.g.:
+      Common-sense semantic understanding (“what” to look for)
+      Reasoning about semantics, dynamics, spatial features, or motion (“how” to act)
+      Conventions for interacting with humans (dialogue, goal specification, information gathering, interpretability)
+      How are these pre-trained representations best integrated into robot systems? E.g.,
+      End-to-end learned policies learned with BC or RL (e.g., RT-2, OpenVLA)
+      Zero-shot controllers (e.g., Code as Policies, MOKA)
+      Hand-crafted scene or task representations (e.g., semantic scene graphs, LeRFs, neural TAMP, image generation as subgoals)
+      How can learned representations be de-biased such that the robots using them can:
+      Robustly operate in underrepresented environments (e.g., households from cultures around the world, not just “conventional” households)
+      Understand language and behaviors from diverse human operators -->
+
+
+
+      <h3 style="text-align: center;">Areas of Interest</h3>
+      <p>We solicit papers of the following topics:
+
+
+
+
+      <ul>
+        <li> What sorts of pre-training tasks, objectives, data, or models yield good representations for robotics? <ul>
+            <li>How do we evaluate or choose good pre-trained models to fine-tune into robot policies or leverage in a
+              perception or control stack?</li>
+            <li>Is “embodied” or “grounded” data necessary for good robot representations, or is general pre-training
+              data sufficient?</li>
+            <li>When is fine-tuning large models from other domains enough for robotic foundation models and when do we
+              need robot-specific large-scale training?</li>
+            <li>How do we elicit representations at a level of granularity and semantic abstraction that is appropriate
+              for robot tasks?</li>
+          </ul>
+        <li> What functionalities do pre-trained representations grant robots? E.g.: <ul>
+            <li>Common-sense semantic understanding (“what” to look for)</li>
+            <li>Reasoning about semantics, dynamics, spatial features, or motion (“how” to act)</li>
+            <li>Conventions for interacting with humans (dialogue, goal specification, information gathering,
+              interpretability)</li>
+          </ul>
+        <li> How are these pre-trained representations best integrated into robot systems? E.g.: <ul>
+            <li>End-to-end learned policies learned with BC or RL (e.g., RT-2, OpenVLA)</li>
+            <li>Zero-shot controllers (e.g., Code as Policies, MOKA)</li>
+            <li>Hand-crafted scene or task representations (e.g., semantic scene graphs, LeRFs, neural TAMP, image
+              generation as subgoals)</li>
+          </ul>
+        <li> How can learned representations be de-biased such that the robots using them can:<ul>
+            <li>Robustly operate in underrepresented environments (e.g., households from cultures around the world, not
+              just “conventional” households)</li>
+            <li>Understand language and behaviors from diverse human operators</li>
+          </ul>
+      </ul>
+      </p>
+    </div>
+
+    <div class="section" id="call">
+
+      <h2>Submission Guidelines</h2>
+
+      <h3>Submission Portal: <a href="" target="_blank">OpenReview</a></h3>
+
+      <p>
+        We are accepting workshop submissions of the following types
+      <ul>
+        <li> Papers - up to 6 pages plus unlimited references / appendices</li>
+        <li> Extended Abstracts - up to 2 pages plus unlimited references / appendices</li>
+      </ul>
+      </p>
+
+      <p>
+        We request that submissions should be in the RSS, CoRL, ICRA, or IROS format. They should <i>not</i> be
+        anonymized.
+      </p>
+
+      <br>
+      <!-- <h3 style="text-align: center;"><b>Accepted papers can be found on <a
+            href="https://openreview.net/group?id=robot-learning.org/CoRL/2023/Workshop/LEAP">OpenReview</a>.</b></h3> -->
+
+      <!-- <h2>Best Paper: <a href="https://openreview.net/forum?id=ZGbWq3VqrO" target="_blank">ReKep: Spatio-Temporal
+          Reasoning of Relational Keypoint Constraints for Robotic Manipulation</a></h2>
+
+      <center><img src="imgs/LEAP24_best_paper.png" width="500"></center> -->
+
+    </div>
+
+
+
+    <div class="section" id="dates" style="align-content: center;">
+      <h2>Important Dates</h2>
+      <table class="calculator table-borderless" style="text-align:center; margin: 0 auto;">
+        <!-- <tr>
+        <td class="noborder">Announcement and Call for Submissions
+        </td>
+        <td class="noborder"><b class="font-weight-bold">Aug 1, 2023</b>
+        </td>
+      </tr> -->
+        <tr>
+          <td class="noborder">Paper Submission Deadline
+          </td>
+          <td class="noborder"><b class="font-weight-bold">TBD</b>
+          </td>
+        </tr>
+        <tr>
+          <td class="noborder">Paper Acceptance
+          </td>
+          <td class="noborder"><b class="font-weight-bold">TBD</b>
+          </td>
+        </tr>
+        <tr>
+          <td class="noborder">Camera-ready Version Due
+          </td>
+          <td class="noborder"><b class="font-weight-bold">TBD</b>
+          </td>
+        </tr>
+        <tr>
+          <td class="noborder">Workshop
+          </td>
+          <td class="noborder"><b class="font-weight-bold">June 25, 2025</b>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="section" id="schedule" style="align-content: center;">
+      <h2>Schedule</h2>
+
+      <tr>
+        <td> </td>
+      </tr>
+
+      <table class="calculator table-borderless" style="text-align:center; margin: 0 auto;">
+        <tr>
+          <td colspan="2">
+            <h4>Session 1</h4>
+          </td>
+        </tr>
+        <tr>
+          <td class="noborder"> 8:00 AM - 8:30 AM</td>
+          <td class="noborder"> <b>Opening Remarks</b></td>
+        </tr>
+        <tr>
+          <td class="noborder"> 8:30 AM - 9:45 AM</td>
+          <td class="noborder"> <b>Invited Talks 1, 2</b></td>
+        </tr>
+        <tr>
+          <td class="noborder"> 9:45 AM - 10:30 AM</td>
+          <td class="noborder"> <b>Poster Session, Coffee Break</b></td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <h4>Session 2</h4>
+          </td>
+        </tr>
+        <tr>
+          <td class="noborder"> 10:30 AM - 11:15 AM</td>
+          <td class="noborder"> <b>Invited Talks 3, 4</b></td>
+        </tr>
+        <tr>
+          <td class="noborder"> 11:15 AM - 12:30 PM</td>
+          <td class="noborder"> <b>Panel 1</b></td>
+        </tr>
+        <tr>
+          <td class="noborder"> 12:30 PM - 2:00 PM</td>
+          <td class="noborder"> <b>Lunch Break</b></td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <h4>Session 3</h4>
+          </td>
+        </tr>
+        <tr>
+          <td class="noborder"> 2:00 PM - 2:30 PM</td>
+          <td class="noborder"> <b>Spotlight Talks</b></td>
+        </tr>
+        <tr>
+          <td class="noborder"> 2:30 PM - 3:45 PM</td>
+          <td class="noborder"> <b>Invited Talks 5, 6</b></td>
+        </tr>
+        <tr>
+          <td class="noborder"> 3:45 PM - 4:15 PM</td>
+          <td class="noborder"> <b>Coffee Break</b></td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <h4>Session 4</h4>
+          </td>
+        </tr>
+        <tr>
+          <td class="noborder"> 4:15 PM - 5:30 PM</td>
+          <td class="noborder"> <b>Invited Talks 7, 8</b></td>
+        </tr>
+        <tr>
+          <td class="noborder"> 5:30 PM - 6:15 PM</td>
+          <td class="noborder"> <b>Panel 2</b></td>
+        </tr>
+        <tr>
+          <td class="noborder"> 6:15 PM - 6:30 PM</td>
+          <td class="noborder"> <b>Closing Remarks</b></td>
+        </tr>
+
+
+      </table>
+
+
+
+    </div>
+
+
+    <!-- <div class = "secion" id="speakers" style="text-align: center; padding: 10px;">
+    <h2> Inivted Speakers</h2>
+
+  </div> -->
+
+    <div class="section" id="speakers" style="text-align: center; padding: 10px;">
+      <h2>Invited Speakers</h2>
+      <div class="grid">
+        <center>
+          <div class="row">
+
+            <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12" style="padding-bottom: 30px;">
+              <a href="https://irosalab.com/people/georgia-chalvatzaki/" target="_blank"><img src="imgs/placeholder.jpg"
+                  class="rounded-circle" alt="" width="140" height="140"></a>
+              <h5 style="margin-bottom:0em;"><a href="" target="_blank">Mahi Shaffiulah</a>
+              </h5>
+              New York University </br> USA
+            </div>
+            <br /> <br />
+
+            <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12" style="padding-bottom: 30px;">
+              <a href="https://irosalab.com/people/georgia-chalvatzaki/" target="_blank"><img src="imgs/placeholder.jpg"
+                  class="rounded-circle" alt="" width="140" height="140"></a>
+              <h5 style="margin-bottom:0em;"><a href="" target="_blank">Andreea Bobu</a>
+              </h5>
+              Massachusetts Institute of Technology </br> USA
+            </div>
+            <br /> <br />
+
+
+
+            <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12" style="padding-bottom: 30px;">
+              <a href="https://irosalab.com/people/georgia-chalvatzaki/" target="_blank"><img src="imgs/placeholder.jpg"
+                  class="rounded-circle" alt="" width="140" height="140"></a>
+              <h5 style="margin-bottom:0em;"><a href="" target="_blank">Yuke Zhu</a>
+              </h5>
+              U.T. Austin & NVIDIA </br> USA
+            </div>
+            <br /> <br />
+
+            <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12" style="padding-bottom: 30px;">
+              <a href="https://irosalab.com/people/georgia-chalvatzaki/" target="_blank"><img src="imgs/placeholder.jpg"
+                  class="rounded-circle" alt="" width="140" height="140"></a>
+              <h5 style="margin-bottom:0em;"><a href="" target="_blank">Chelsea Finn</a>
+              </h5>
+              Stanford University & Physical Intelligence </br> USA
+            </div>
+            <br /> <br />
+
+            <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12" style="padding-bottom: 30px;">
+              <a href="https://irosalab.com/people/georgia-chalvatzaki/" target="_blank"><img src="imgs/placeholder.jpg"
+                  class="rounded-circle" alt="" width="140" height="140"></a>
+              <h5 style="margin-bottom:0em;"><a href="" target="_blank">Sourav Garg</a>
+              </h5>
+              University of Adelaide </br> Australia
+            </div>
+            <br /> <br />
+
+            <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12" style="padding-bottom: 30px;">
+              <a href="https://irosalab.com/people/georgia-chalvatzaki/" target="_blank"><img src="imgs/placeholder.jpg"
+                  class="rounded-circle" alt="" width="140" height="140"></a>
+              <h5 style="margin-bottom:0em;"><a href="" target="_blank">Wolfram Burgard</a>
+              </h5>
+              University of Technology Nuremberg </br> Germany
+            </div>
+            <br /> <br />
+
+            <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12" style="padding-bottom: 30px;">
+              <a href="https://irosalab.com/people/georgia-chalvatzaki/" target="_blank"><img src="imgs/placeholder.jpg"
+                  class="rounded-circle" alt="" width="140" height="140"></a>
+              <h5 style="margin-bottom:0em;"><a href="" target="_blank">Georgia Chalvatzaki</a>
+              </h5>
+              TU Darmstadt </br> Germany
+            </div>
+            <br /> <br />
+
+            <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12" style="padding-bottom: 30px;">
+              <a href="https://irosalab.com/people/georgia-chalvatzaki/" target="_blank"><img src="imgs/placeholder.jpg"
+                  class="rounded-circle" alt="" width="140" height="140"></a>
+              <h5 style="margin-bottom:0em;"><a href="" target="_blank">Liam Paull</a>
+              </h5>
+              University of Montreal </br> Canada
+            </div>
+            <br /> <br />
+
+          </div>
+        </center>
+      </div>
+
+    </div>
+
+
+    <div class="section" id="committee" style="text-align: center; padding: 10px;">
+      <h2>Organizing Committees</h2>
+      <!-- <h3>Organizing Committee</h3> -->
+      <br />
+
+      <div class="grid">
+        <center>
+          <div class="row">
+            <div class="col-lg-4 col-md-3 col-sm-6 col-xs-12" style="padding-bottom: 30px;">
+              <a href="" target="_blank"><img src="imgs/placeholder.jpg" class="rounded-circle" alt="" width="140"
+                  height="140"></a>
+              <h5 style="margin-bottom:0em;"> <a href="verityw.github.io" target="_blank">William Chen</a></h5>
+              U.C. Berkeley
+            </div>
+            <br /> <br />
+            <div class="col-lg-4 col-md-3 col-sm-6 col-xs-12" style="padding-bottom: 30px;">
+              <a href="" target="_blank"><img src="imgs/placeholder.jpg" class="rounded-circle" alt="" width="140"
+                  height="140"></a>
+              <h5 style="margin-bottom:0em;"> <a href="" target="_blank">Dominic Maggio</a></h5>
+              Massachusetts Institute of Technology
+            </div>
+            <br /> <br />
+            <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12" style="padding-bottom: 30px;">
+              <a href="" target="_blank"><img src="imgs/placeholder.jpg" class="rounded-circle" alt="" width="140"
+                  height="140"></a>
+              <h5 style="margin-bottom:0em;"> <a href="" target="_blank">Mara Levy</a></h5>
+              University of Maryland
+            </div>
+            <br /> <br />
+
+
+          </div>
+          <div class="row">
+            <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12" style="padding-bottom: 30px;">
+              <a href="" target="_blank"><img src="imgs/placeholder.jpg" class="rounded-circle" alt="" width="140"
+                  height="140"></a>
+              <h5 style="margin-bottom:0em;"> <a href="" target="_blank">Dhruv Shah</a></h5>
+              Google DeepMind
+            </div>
+            <br /> <br />
+            <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12" style="padding-bottom: 30px;">
+              <a href="" target="_blank"><img src="imgs/placeholder.jpg" class="rounded-circle" alt="" width="140"
+                  height="140"></a>
+              <h5 style="margin-bottom:0em;"> <a href="" target="_blank">Jared Strader</a></h5>
+              Massachusetts Institute of Technology
+            </div>
+            <br /> <br />
+            <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12" style="padding-bottom: 30px;">
+              <a href="" target="_blank"><img src="imgs/placeholder.jpg" class="rounded-circle" alt="" width="140"
+                  height="140"></a>
+              <h5 style="margin-bottom:0em;"> <a href="" target="_blank">Kuan Fang</a></h5>
+              Cornell University
+            </div>
+            <br /> <br />
+
+          </div>
+
+
+      </div>
+    </div>
+    <div class="section" id="accpted" style="text-align: left; padding: 5px;">
+      <h2>Accepted Papers (Read them <a target="_blank" href="">here</a>)</h2> <!--TODO: Fill in link to papers!-->
+      <ul>
+
+        <li><b>Paper1</b>
+          <br>Author1
+        </li>
+        <li><b>Paper2</b>
+          <br>Author2
+        </li>
+
+      </ul>
+
+    </div>
+
+    <div class="section" id="pc" style="text-align: left; padding: 5px;">
+      <h2>Program Committee</h2>
+      <center>We are currently looking for program committee members!</center>
+
+
+      <table class="calculator table-borderless" style="text-align:center; margin: 0 auto;">
+
+        <tr>
+          <td>TODO</td>
+          <td>TODO</td>
+          <td>TODO</td>
+          <td>TODO/td>
+        </tr>
+
+        <tr>
+          <td>TODO</td>
+          <td>TODO</td>
+          <td>TODO</td>
+          <td>TODO/td>
+        </tr>
+
+
+
+      </table>
+    </div>
+
+    <script src="javascripts/scale.fix.js"></script>
+    <script>
+      var coll = document.getElementsByClassName("collapsible");
+      var i;
+
+      for (i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function () {
+          this.classList.toggle("active");
+          var content = this.nextElementSibling;
+          if (content.style.display === "block") {
+            content.style.display = "none";
+          } else {
+            content.style.display = "block";
+          }
+        });
+      }
+    </script>
+</body>
+
+</html>
